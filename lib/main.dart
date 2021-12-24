@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 // Own modules
 import 'selectedItem.dart';
+import 'shoppingCart.dart';
+import 'disabledPagesText.dart';
 
 final List<String> viewListItemNames = ["Sneakers", "Jacket", "Watch"];
 final List<String> viewListIconUrls = [
@@ -25,11 +27,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: MyHomePage(),
-      // initialRoute: "/",
-      // routes: {
-      //   "/": (_) => MyHomePage(),
-      //   "/item": (BuildContext context) => SelectedItem(),
-      // },
     );
   }
 }
@@ -41,7 +38,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int selectedPage = 0;
-  final _pageOptions = [MainPage(), MainPage(), MainPage()];
+  final _pageOptions = [
+    MainPage(),
+    DisabledPagesText(),
+    ShoppingCart(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -74,10 +75,12 @@ class _MyHomePageState extends State<MyHomePage> {
             height: 20,
             width: 50,
             margin: EdgeInsets.only(right: 15, top: 10),
-            child: ClipOval(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
               child: Image.network(
-                  'https://source.unsplash.com/50x50/?portrait',
-                  fit: BoxFit.cover),
+                "https://source.unsplash.com/50x50/?portrait",
+                fit: BoxFit.fill,
+              ),
             ),
           ),
         ],
@@ -89,17 +92,14 @@ class _MyHomePageState extends State<MyHomePage> {
         items: [
           TabItem(icon: Icons.home, title: "Home"),
           TabItem(icon: Icons.search),
-          TabItem(icon: Icons.work),
+          TabItem(icon: Icons.shopping_basket),
           TabItem(icon: Icons.favorite_border)
         ],
         initialActiveIndex: 0,
-        onTap: (int i) {
-          setState(
-            () {
-              selectedPage = i;
-              print("index ${i}");
-            },
-          );
+        onTap: (int index) {
+          (index == 3)
+              ? setState(() => selectedPage = 1)
+              : setState(() => selectedPage = index);
         },
       ),
     );
