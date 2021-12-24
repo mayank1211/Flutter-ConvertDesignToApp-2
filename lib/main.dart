@@ -13,8 +13,9 @@ final List<String> viewListIconUrls = [
 ];
 final List<String> viewListSneakersPics = [
   'sneaker1.png',
-  'sneaker1.png',
-  'sneaker1.png'
+];
+final List<String> viewListClothesPics = [
+  'jacket.png',
 ];
 
 void main() => runApp(const MyApp());
@@ -115,189 +116,312 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        margin: const EdgeInsets.only(left: 30, right: 30, bottom: 30, top: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text("Our",
-                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30)),
-            Text("Products",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
-            SizedBox(height: 30),
-            IntrinsicHeight(
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      new Flexible(
-                        child: Container(
-                          width: MediaQuery.of(context).size.height * 0.3,
-                          height: 45,
-                          child: new TextField(
-                            maxLines: 1,
-                            decoration: InputDecoration(
-                                filled: true,
-                                contentPadding: EdgeInsets.all(10.0),
-                                fillColor: Colors.grey.shade200,
-                                prefixIcon: Icon(Icons.search),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                      width: 15.0, color: Colors.grey),
-                                ),
-                                hintText: "Search Products"),
+      body: SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.only(left: 30, right: 30, bottom: 30, top: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text("Our",
+                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30)),
+              Text("Products",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
+              SizedBox(height: 30),
+              IntrinsicHeight(
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        new Flexible(
+                          child: Container(
+                            width: MediaQuery.of(context).size.height * 0.3,
+                            height: 45,
+                            child: new TextField(
+                              maxLines: 1,
+                              decoration: InputDecoration(
+                                  filled: true,
+                                  contentPadding: EdgeInsets.all(10.0),
+                                  fillColor: Colors.grey.shade200,
+                                  prefixIcon: Icon(Icons.search),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                        width: 15.0, color: Colors.grey),
+                                  ),
+                                  hintText: "Search Products"),
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(width: 20),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: IconButton(
-                          icon: Icon(Icons.filter_list),
-                          onPressed: () {
-                            print("Pressed");
-                          },
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ),
-            SizedBox(height: 30),
-            new Expanded(
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: viewListIconUrls.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Color.fromRGBO(255, 255, 255, 1),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: Colors.orange.shade600,
-                        width: 2,
-                      ),
-                    ),
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(right: 10),
-                    padding: EdgeInsets.only(left: 10, right: 10),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Image.network(viewListIconUrls[index],
-                            width: 40, height: 30),
-                        SizedBox(width: 5),
-                        Text(
-                          viewListItemNames[index],
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                        SizedBox(width: 20),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: IconButton(
+                            icon: Icon(Icons.filter_list),
+                            onPressed: () {
+                              print("Pressed");
+                            },
+                          ),
                         )
                       ],
-                    ),
-                  );
-                },
+                    )
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: 30),
-            Text(
-              "View All",
-              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w500),
-            ),
-            SizedBox(height: 10),
-            new Row(
-              children: <Widget>[
-                Expanded(
-                  child: SizedBox(
-                    height: 230,
-                    width: 150,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: viewListIconUrls.length,
-                      itemBuilder: (BuildContext ctxt, int index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Future(() {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SelectedItem(
-                                    imageUrl: viewListSneakersPics[index],
+              SizedBox(height: 30),
+              Column(
+                children: <Widget>[
+                  new Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: SizedBox(
+                          height: 50.0,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: viewListIconUrls.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                  color: Color.fromRGBO(255, 255, 255, 1),
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: Colors.orange.shade600,
+                                    width: 2,
                                   ),
                                 ),
+                                alignment: Alignment.center,
+                                margin: EdgeInsets.only(right: 10),
+                                padding: EdgeInsets.only(left: 10, right: 10),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Image.network(viewListIconUrls[index],
+                                        width: 40, height: 30),
+                                    SizedBox(width: 5),
+                                    Text(
+                                      viewListItemNames[index],
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
                               );
-                            });
-                          },
-                          child: Column(
-                            children: [
-                              Row(
-                                children: <Widget>[
-                                  Container(
-                                    height: 230,
-                                    width: 180,
-                                    decoration: BoxDecoration(
-                                        color: Color.fromRGBO(255, 255, 255, 1),
-                                        borderRadius:
-                                            BorderRadius.circular(30)),
-                                    margin: EdgeInsets.only(right: 30),
-                                    child: Column(
-                                      children: [
-                                        Column(
-                                          children: [
-                                            Container(
-                                              alignment: Alignment.topLeft,
-                                              padding: EdgeInsets.only(
-                                                  left: 30, top: 25),
-                                              child:
-                                                  Icon(Icons.favorite_border),
-                                            ),
-                                            Image(
-                                              image: AssetImage(
-                                                  "assets/images/${viewListSneakersPics[index]}"),
-                                              height: 100,
-                                              width: 100,
-                                            ),
-                                            Text(
-                                              "Nike Air Max 200",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                              "Trending Now",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.orange),
-                                            ),
-                                            Text(
-                                              r"$240",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            )
-                                          ],
-                                        )
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                ],
+              ),
+              SizedBox(height: 30),
+              Text(
+                "View All",
+                style:
+                    TextStyle(color: Colors.blue, fontWeight: FontWeight.w500),
+              ),
+              SizedBox(height: 10),
+              Column(
+                children: <Widget>[
+                  new Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: SizedBox(
+                          height: 230,
+                          width: 150,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: viewListIconUrls.length,
+                            itemBuilder: (BuildContext ctxt, int index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Future(() {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => SelectedItem(
+                                          imageUrl: viewListSneakersPics[0],
+                                        ),
+                                      ),
+                                    );
+                                  });
+                                },
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: <Widget>[
+                                        Container(
+                                          height: 230,
+                                          width: 180,
+                                          decoration: BoxDecoration(
+                                              color: Color.fromRGBO(
+                                                  255, 255, 255, 1),
+                                              borderRadius:
+                                                  BorderRadius.circular(30)),
+                                          margin: EdgeInsets.only(right: 30),
+                                          child: Column(
+                                            children: [
+                                              Column(
+                                                children: [
+                                                  Container(
+                                                    alignment:
+                                                        Alignment.topLeft,
+                                                    padding: EdgeInsets.only(
+                                                        left: 30, top: 25),
+                                                    child: Icon(
+                                                        Icons.favorite_border),
+                                                  ),
+                                                  Image(
+                                                    image: AssetImage(
+                                                        "assets/images/${viewListSneakersPics[0]}"),
+                                                    height: 100,
+                                                    width: 100,
+                                                  ),
+                                                  Text(
+                                                    "Nike Air Max 200",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  Text(
+                                                    "Trending Now",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.orange),
+                                                  ),
+                                                  Text(
+                                                    r"$240",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  )
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
                                       ],
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      ),
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   ),
-                )
-              ],
-            ),
-            SizedBox(height: 30),
-            Text(
-              "View All",
-              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w500),
-            ),
-          ],
+                ],
+              ),
+              SizedBox(height: 30),
+              Text(
+                "View All",
+                style:
+                    TextStyle(color: Colors.blue, fontWeight: FontWeight.w500),
+              ),
+              SizedBox(height: 10),
+              Column(
+                children: <Widget>[
+                  new Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: SizedBox(
+                          height: 230,
+                          width: 150,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: viewListIconUrls.length,
+                            itemBuilder: (BuildContext ctxt, int index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Future(() {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => SelectedItem(
+                                          imageUrl: viewListClothesPics[0],
+                                        ),
+                                      ),
+                                    );
+                                  });
+                                },
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: <Widget>[
+                                        Container(
+                                          height: 230,
+                                          width: 180,
+                                          decoration: BoxDecoration(
+                                              color: Color.fromRGBO(
+                                                  255, 255, 255, 1),
+                                              borderRadius:
+                                                  BorderRadius.circular(30)),
+                                          margin: EdgeInsets.only(right: 30),
+                                          child: Column(
+                                            children: [
+                                              Column(
+                                                children: [
+                                                  Container(
+                                                    alignment:
+                                                        Alignment.topLeft,
+                                                    padding: EdgeInsets.only(
+                                                        left: 30, top: 25),
+                                                    child: Icon(
+                                                        Icons.favorite_border),
+                                                  ),
+                                                  Image(
+                                                    image: AssetImage(
+                                                        "assets/images/${viewListClothesPics[0]}"),
+                                                    height: 100,
+                                                    width: 100,
+                                                  ),
+                                                  Text(
+                                                    "Nike Air Max 200",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  Text(
+                                                    "Trending Now",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.orange),
+                                                  ),
+                                                  Text(
+                                                    r"$240",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  )
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
