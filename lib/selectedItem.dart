@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class SelectedItem extends StatefulWidget {
-  SelectedItem({Key? key, this.imageUrl}) : super(key: key);
-  var imageUrl;
+  SelectedItem({Key? key, this.imageUrl, this.isFavorite}) : super(key: key);
+  var imageUrl, isFavorite;
 
   @override
   State<SelectedItem> createState() => _ItemPageState();
@@ -31,7 +31,13 @@ class _ItemPageState extends State<SelectedItem> {
           Container(
             margin: EdgeInsets.only(right: 15, top: 10),
             child: IconButton(
-              icon: const Icon(Icons.favorite, size: 30, color: Colors.orange),
+              icon: widget.isFavorite
+                  ? Icon(Icons.favorite, size: 30, color: Colors.orange)
+                  : Icon(
+                      Icons.favorite_border,
+                      size: 30,
+                      color: Colors.black,
+                    ),
               onPressed: () {
                 print("Added to linked");
               },

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'dart:math';
 // Own modules
 import 'selectedItem.dart';
 import 'shoppingCart.dart';
@@ -8,9 +9,10 @@ import 'filterItemsModel.dart';
 
 final List<String> viewListItemNames = ["Sneakers", "Jacket", "Watch"];
 final List<String> viewListIconUrls = [
-  'https://www.vhv.rs/dpng/d/170-1703412_collection-of-free-jordans-drawing-download-on-ui.png',
-  'https://cdn.dribbble.com/users/2744556/screenshots/16993349/media/d490d0324391f9d3f9abe868893b2a13.png',
-  'https://cdn.dribbble.com/users/7135249/screenshots/16894656/media/97b05870189511fae7f8606702642a49.jpg'
+  'filterSneaker.png',
+  'filterJacket.png',
+  'filterWatch.png',
+  'filterSneaker.png',
 ];
 final List<String> viewListSneakersPics = [
   'sneaker1.png',
@@ -19,7 +21,7 @@ final List<String> viewListClothesPics = [
   'jacket.png',
 ];
 
-void main() => runApp(const MyApp());
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -183,7 +185,7 @@ class _MainPageState extends State<MainPage> {
                           child: ListView.builder(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
-                            itemCount: viewListIconUrls.length,
+                            itemCount: 3,
                             itemBuilder: (BuildContext context, int index) {
                               return GestureDetector(
                                 onTap: () => {
@@ -212,8 +214,10 @@ class _MainPageState extends State<MainPage> {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
-                                      Image.network(viewListIconUrls[index],
-                                          width: 40, height: 30),
+                                      Image.asset(
+                                          "assets/images/${viewListIconUrls[index]}",
+                                          width: 40,
+                                          height: 30),
                                       SizedBox(width: 5),
                                       Text(
                                         viewListItemNames[index],
@@ -251,6 +255,7 @@ class _MainPageState extends State<MainPage> {
                             scrollDirection: Axis.horizontal,
                             itemCount: 10, // viewListIconUrls.length
                             itemBuilder: (BuildContext ctxt, int index) {
+                              bool isFavorite = Random().nextBool();
                               return GestureDetector(
                                 onTap: () {
                                   Future(
@@ -259,8 +264,8 @@ class _MainPageState extends State<MainPage> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => SelectedItem(
-                                            imageUrl: viewListSneakersPics[0],
-                                          ),
+                                              imageUrl: viewListSneakersPics[0],
+                                              isFavorite: isFavorite),
                                         ),
                                       );
                                     },
@@ -284,21 +289,26 @@ class _MainPageState extends State<MainPage> {
                                               Column(
                                                 children: [
                                                   Container(
-                                                    height: 140,
-                                                    decoration: BoxDecoration(
-                                                      image: DecorationImage(
-                                                        image: AssetImage(
-                                                          "assets/images/${viewListSneakersPics[0]}",
+                                                      height: 140,
+                                                      decoration: BoxDecoration(
+                                                        image: DecorationImage(
+                                                          image: AssetImage(
+                                                            "assets/images/${viewListSneakersPics[0]}",
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    alignment:
-                                                        Alignment.topLeft,
-                                                    padding: EdgeInsets.only(
-                                                        left: 30, top: 20),
-                                                    child: Icon(
-                                                        Icons.favorite_border),
-                                                  ),
+                                                      alignment:
+                                                          Alignment.topLeft,
+                                                      padding: EdgeInsets.only(
+                                                          left: 30, top: 20),
+                                                      child: isFavorite
+                                                          ? Icon(
+                                                              Icons.favorite,
+                                                              color:
+                                                                  Colors.orange,
+                                                            )
+                                                          : Icon(Icons
+                                                              .favorite_border)),
                                                   Text(
                                                     "Nike Air Max 200",
                                                     style: TextStyle(
