@@ -1,3 +1,7 @@
+import 'dart:ffi';
+import 'dart:math';
+
+import 'package:ecommerce/models/fetchAsosProducts.dart';
 import 'package:flutter/material.dart';
 import 'selectedItem.dart';
 import 'main.dart';
@@ -17,6 +21,13 @@ class _SearchItemsView extends State<SearchItemsView> {
   var resultFoundCount = 0;
   var resultFoundImage;
   var defaultViewLayout = true; // true == gridview, false == listview
+  late Future<Products> futurePoducts;
+
+  @override
+  void initState() {
+    super.initState();
+    futurePoducts = fetchProducts(null);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +62,7 @@ class _SearchItemsView extends State<SearchItemsView> {
                     ),
                     hintText: "Search Products"),
                 onChanged: (text) {
-                  if (text.isEmpty) {
+                  if (text.isEmpty || text == null) {
                     setState(() {
                       resultFoundCount = 0;
                       resultFoundImage = "";
@@ -77,6 +88,7 @@ class _SearchItemsView extends State<SearchItemsView> {
                     });
                   } else {
                     setState(() {
+                      fetchProducts(new Random().nextInt(10));
                       resultFoundCount = viewListIconUrls
                           .where(
                               (element) => element.toLowerCase().contains(text))
@@ -143,163 +155,184 @@ class _SearchItemsView extends State<SearchItemsView> {
                 ),
               ],
             ),
-            Expanded(
-              child: defaultViewLayout
-                  ? GridView.count(
-                      crossAxisCount: 2,
-                      childAspectRatio: (110 / 150),
-                      children: new List<Widget>.generate(
-                        resultFoundCount != 0 ? resultFoundCount : 0,
-                        (index) {
-                          return new GridTile(
-                            child: new Container(
-                              margin:
-                                  EdgeInsets.only(top: 10, left: 5, right: 5),
-                              color: Colors.white,
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => SelectedItem(
-                                        imageUrl: viewListSneakersPics[0],
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: Column(
-                                  children: [
-                                    Image.asset(
-                                      "assets/images/${resultFoundImage}",
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.only(
-                                        top: 5,
-                                        bottom: 5,
-                                        left: 10,
-                                        right: 10,
-                                      ),
+            FutureBuilder<Products>(
+              future: futurePoducts,
+              builder: (context, data) {
+                if (data.hasData) {
+                  return Expanded(
+                    child: defaultViewLayout
+                        ? GridView.count(
+                            crossAxisCount: 2,
+                            childAspectRatio: (110 / 150),
+                            children: new List<Widget>.generate(
+                              resultFoundCount != 0 ? resultFoundCount : 0,
+                              (index) {
+                                return new GridTile(
+                                  child: new Container(
+                                    margin: EdgeInsets.only(
+                                        top: 10, left: 5, right: 5),
+                                    color: Colors.white,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => SelectedItem(
+                                              imageUrl: viewListSneakersPics[0],
+                                            ),
+                                          ),
+                                        );
+                                      },
                                       child: Column(
                                         children: [
-                                          Text(
-                                            "FRANCE AUTHENTIC HOME JERSEY 2018",
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
+                                          Image.network(
+                                            data.data!.image,
+                                            height: 150,
+                                            width: 150,
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.only(
+                                              top: 5,
+                                              bottom: 5,
+                                              left: 10,
+                                              right: 10,
                                             ),
-                                          ),
-                                          SizedBox(
-                                            height: 7,
-                                          ),
-                                          Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              "NIKE",
-                                              style: TextStyle(
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                r"$130",
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              Text(
-                                                "ADD TO CART",
-                                                style: TextStyle(
-                                                    fontSize: 12,
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  data.data!.title,
+                                                  style: TextStyle(
+                                                    fontSize: 14,
                                                     fontWeight: FontWeight.bold,
-                                                    color: Colors.blue),
-                                              ),
-                                            ],
-                                          ),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 7,
+                                                ),
+                                                Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    "NIKE",
+                                                    style: TextStyle(
+                                                      fontSize: 13,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      "\$${data.data!.price}",
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      "ADD TO CART",
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: Colors.blue),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          )
                                         ],
                                       ),
-                                    )
-                                  ],
-                                ),
-                              ),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
-                          );
-                        },
-                      ),
-                    )
-                  : ListView.builder(
-                      itemBuilder: (BuildContext, index) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Image.asset(
-                              "assets/images/${resultFoundImage}",
-                              width: 100,
-                              height: 100,
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.height * 0.21,
-                              padding: EdgeInsets.only(
-                                  top: 10, bottom: 10, left: 10),
-                              child: Column(
+                          )
+                        : ListView.builder(
+                            itemBuilder: (BuildContext, index) {
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    "FRANCE AUTHENTIC HOME JERSEY 2018",
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                    softWrap: true,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                                  Image.asset(
+                                    "assets/images/${resultFoundImage}",
+                                    width: 100,
+                                    height: 100,
                                   ),
-                                  SizedBox(height: 15),
-                                  Text(
-                                    "Nike",
-                                    overflow: TextOverflow.ellipsis,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w400),
+                                  Container(
+                                    width: MediaQuery.of(context).size.height *
+                                        0.21,
+                                    padding: EdgeInsets.only(
+                                        top: 10, bottom: 10, left: 10),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "FRANCE AUTHENTIC HOME JERSEY 2018",
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          softWrap: true,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(height: 15),
+                                        Text(
+                                          "Nike",
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    padding:
+                                        EdgeInsets.only(top: 10, bottom: 10),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          r"$130",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20),
+                                        ),
+                                        SizedBox(height: 20),
+                                        Text(
+                                          "ADD TO CART",
+                                          style: TextStyle(color: Colors.blue),
+                                          overflow: TextOverflow.fade,
+                                          maxLines: 2,
+                                          softWrap: true,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(top: 10, bottom: 10),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    r"$130",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
-                                  ),
-                                  SizedBox(height: 20),
-                                  Text(
-                                    "ADD TO CART",
-                                    style: TextStyle(color: Colors.blue),
-                                    overflow: TextOverflow.fade,
-                                    maxLines: 2,
-                                    softWrap: true,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                      itemCount: resultFoundCount != 0 ? resultFoundCount : 0,
-                      shrinkWrap: true,
-                      padding: EdgeInsets.all(5),
-                      scrollDirection: Axis.vertical,
-                    ),
+                              );
+                            },
+                            itemCount:
+                                resultFoundCount != 0 ? resultFoundCount : 0,
+                            shrinkWrap: true,
+                            padding: EdgeInsets.all(5),
+                            scrollDirection: Axis.vertical,
+                          ),
+                  );
+                } else if (data.hasError) {
+                  return Text('${data.error}');
+                }
+                return const CircularProgressIndicator();
+              },
             ),
           ],
         ),

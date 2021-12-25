@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'dart:math';
 // Own modules
+import 'models/fetchAsosProducts.dart';
 import 'selectedItem.dart';
 import 'shoppingCart.dart';
 import 'searchItem.dart';
@@ -152,6 +155,7 @@ class _MainPageState extends State<MainPage> {
                                         width: 15.0, color: Colors.grey),
                                   ),
                                   hintText: "Search Products"),
+                              onSubmitted: (text) {},
                             ),
                           ),
                         ),
