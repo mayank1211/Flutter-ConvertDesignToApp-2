@@ -6,10 +6,10 @@ class SelectedItem extends StatefulWidget {
   var imageUrl;
 
   @override
-  State<SelectedItem> createState() => _ItemPageeState();
+  State<SelectedItem> createState() => _ItemPageState();
 }
 
-class _ItemPageeState extends State<SelectedItem> {
+class _ItemPageState extends State<SelectedItem> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

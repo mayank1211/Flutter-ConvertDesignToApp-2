@@ -3,7 +3,7 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 // Own modules
 import 'selectedItem.dart';
 import 'shoppingCart.dart';
-import 'disabledPagesText.dart';
+import 'searchItem.dart';
 import 'filterItemsModel.dart';
 
 final List<String> viewListItemNames = ["Sneakers", "Jacket", "Watch"];
@@ -42,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int selectedPage = 0;
   final _pageOptions = [
     MainPage(),
-    DisabledPagesText(),
+    SearchItemsView(),
     ShoppingCart(),
   ];
 
