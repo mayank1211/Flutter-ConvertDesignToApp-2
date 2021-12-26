@@ -268,8 +268,15 @@ class _MainPageState extends State<MainPage> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => SelectedItem(
-                                              imageUrl: viewListSneakersPics[0],
-                                              isFavorite: isFavorite),
+                                            product: new Product(
+                                                id: 1,
+                                                title: "title",
+                                                price: 20.99.toString(),
+                                                category: "category",
+                                                image: "image",
+                                                rating: 4.9,
+                                                description: "description"),
+                                          ),
                                         ),
                                       );
                                     },
@@ -377,7 +384,14 @@ class _MainPageState extends State<MainPage> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => SelectedItem(
-                                          imageUrl: viewListClothesPics[0],
+                                          product: new Product(
+                                              id: 1,
+                                              title: "title",
+                                              price: 20.99.toString(),
+                                              category: "category",
+                                              image: "image",
+                                              rating: 4.9,
+                                              description: "description"),
                                         ),
                                       ),
                                     );

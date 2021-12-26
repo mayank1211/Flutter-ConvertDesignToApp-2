@@ -1,9 +1,11 @@
+import 'dart:math';
+
+import 'package:ecommerce/models/fetchAsosProducts.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 class SelectedItem extends StatefulWidget {
-  SelectedItem({Key? key, this.imageUrl, this.isFavorite}) : super(key: key);
-  var imageUrl, isFavorite;
+  SelectedItem({Key? key, required this.product}) : super(key: key);
+  Product product;
 
   @override
   State<SelectedItem> createState() => _ItemPageState();
@@ -31,7 +33,7 @@ class _ItemPageState extends State<SelectedItem> {
           Container(
             margin: EdgeInsets.only(right: 15, top: 10),
             child: IconButton(
-              icon: widget.isFavorite
+              icon: new Random().nextBool()
                   ? Icon(Icons.favorite, size: 30, color: Colors.orange)
                   : Icon(
                       Icons.favorite_border,
@@ -52,8 +54,8 @@ class _ItemPageState extends State<SelectedItem> {
             color: Color.fromRGBO(243, 243, 243, 1),
             child: Column(
               children: [
-                Image.asset(
-                  "assets/images/${widget.imageUrl}",
+                Image.network(
+                  widget.product.image,
                   width: MediaQuery.of(context).size.width * 0.9,
                   height: MediaQuery.of(context).size.height * 0.3,
                 ),
@@ -67,8 +69,8 @@ class _ItemPageState extends State<SelectedItem> {
                         borderRadius: BorderRadius.circular(30),
                         border: Border.all(color: Colors.orange),
                       ),
-                      child: Image.asset(
-                        "assets/images/${widget.imageUrl}",
+                      child: Image.network(
+                        widget.product.image,
                         fit: BoxFit.cover,
                       ),
                       margin: EdgeInsets.only(right: 10),
@@ -80,8 +82,8 @@ class _ItemPageState extends State<SelectedItem> {
                         borderRadius: BorderRadius.circular(30),
                         border: Border.all(color: Colors.orange),
                       ),
-                      child: Image.asset(
-                        "assets/images/${widget.imageUrl}",
+                      child: Image.network(
+                        widget.product.image,
                         fit: BoxFit.cover,
                       ),
                       margin: EdgeInsets.only(right: 10),
@@ -93,8 +95,8 @@ class _ItemPageState extends State<SelectedItem> {
                         borderRadius: BorderRadius.circular(30),
                         border: Border.all(color: Colors.orange),
                       ),
-                      child: Image.asset(
-                        "assets/images/${widget.imageUrl}",
+                      child: Image.network(
+                        widget.product.image,
                         fit: BoxFit.cover,
                       ),
                       margin: EdgeInsets.only(right: 10),
@@ -135,52 +137,61 @@ class _ItemPageState extends State<SelectedItem> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            "NIKE AIR MAX 200",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
+                          Container(
+                            width: MediaQuery.of(context).size.height * 0.29,
+                            child: Text(
+                              widget.product.title,
+                              overflow: TextOverflow.visible,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 19,
+                              ),
+                            ),
                           ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
+                          Column(
                             children: [
-                              Text(
-                                r"$",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17,
-                                  color: Colors.orange,
-                                ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    r"$",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                      color: Colors.orange,
+                                    ),
+                                  ),
+                                  Text(
+                                    widget.product.price,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Text(
-                                "240",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(),
+                                  IconTheme(
+                                    data: IconThemeData(
+                                      color: Colors.amber,
+                                      size: 15,
+                                    ),
+                                    child: StarDisplay(
+                                        value: widget.product.rating.toInt()),
+                                  ),
+                                ],
                               ),
-                              Padding(
-                                padding: EdgeInsets.only(right: 15),
-                              )
                             ],
                           ),
                         ],
                       ),
                       SizedBox(
                         height: 5,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(),
-                          IconTheme(
-                            data: IconThemeData(
-                              color: Colors.amber,
-                              size: 15,
-                            ),
-                            child: StarDisplay(value: 4),
-                          ),
-                        ],
                       ),
                       SizedBox(height: 5),
                       Text(
@@ -227,7 +238,8 @@ class _ItemPageState extends State<SelectedItem> {
                         textAlign: TextAlign.left,
                       ),
                       Text(
-                          "Lorem Ipsum,  Ipsum Lorem Ipsum,  Ipsum Lorem Ipsum,  Ipsum Lorem IpsumLorem Ipsum,  Ipsum Lorem Ipsum,  Ipsum Lorem Ipsum,  Ipsum Lorem IpsumLorem Ipsum,  Ipsum Lorem Ipsum,  Ipsum Lorem Ipsum,  Ipsum Lorem IpsumLorem Ipsum,  Ipsum Lorem Ipsum,  Ipsum Lorem Ipsum,  Ipsum Lorem IpsumLorem Ipsum,  Ipsum Lorem Ipsum,  Ipsum Lorem Ipsum,  Ipsum Lorem IpsumLorem Ipsum,  Ipsum Lorem Ipsum,  Ipsum Lorem Ipsum,  Ipsum Lorem IpsumLorem Ipsum,  Ipsum Lorem Ipsum,  Ipsum Lorem Ipsum,  Ipsum Lorem IpsumLorem Ipsum,  Ipsum Lorem Ipsum,  Ipsum Lorem Ipsum,  Ipsum Lorem Ipsum,  Ipsum."),
+                        widget.product.description,
+                      ),
                     ],
                   ),
                 ),

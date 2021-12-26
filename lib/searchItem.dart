@@ -1,13 +1,7 @@
-import 'dart:ffi';
-import 'dart:math';
-
 import 'package:ecommerce/models/fetchAsosProducts.dart';
 import 'package:flutter/material.dart';
 import 'selectedItem.dart';
 import 'main.dart';
-
-List<String> _personList = [];
-List<String> _searchList = [];
 
 class SearchItemsView extends StatefulWidget {
   SearchItemsView({Key? key, this.searchText}) : super(key: key);
@@ -18,15 +12,14 @@ class SearchItemsView extends StatefulWidget {
 }
 
 class _SearchItemsView extends State<SearchItemsView> {
-  var resultFoundCount = 0;
-  var resultFoundImage;
+  List<Product> visibleNames = [];
   var defaultViewLayout = true; // true == gridview, false == listview
-  late Future<Products> futurePoducts;
+  late final Future<List<Product>> futurePoducts;
 
   @override
   void initState() {
     super.initState();
-    futurePoducts = fetchProducts(null);
+    futurePoducts = fetchProducts();
   }
 
   @override
@@ -62,42 +55,52 @@ class _SearchItemsView extends State<SearchItemsView> {
                     ),
                     hintText: "Search Products"),
                 onChanged: (text) {
-                  if (text.isEmpty || text == null) {
+                  if (text.isEmpty) {
                     setState(() {
-                      resultFoundCount = 0;
-                      resultFoundImage = "";
+                      visibleNames = [];
                     });
                   } else {
-                    setState(() {
-                      resultFoundCount = viewListIconUrls
-                          .where(
-                              (element) => element.toLowerCase().contains(text))
-                          .length;
-                      resultFoundImage = viewListIconUrls
-                          .where(
-                              (element) => element.toLowerCase().contains(text))
-                          .first;
-                    });
+                    setState(
+                      () {
+                        visibleNames = [];
+                        futurePoducts.then(
+                          (value) => {
+                            value.forEach((element) {
+                              if (element.title
+                                  .toLowerCase()
+                                  .contains(text.toLowerCase())) {
+                                visibleNames.add(element);
+                              }
+                            }),
+                          },
+                        );
+                      },
+                    );
                   }
                 },
                 onSubmitted: (text) {
                   if (text.isEmpty) {
                     setState(() {
-                      resultFoundCount = 0;
-                      resultFoundImage = "";
+                      visibleNames = [];
                     });
                   } else {
-                    setState(() {
-                      fetchProducts(new Random().nextInt(10));
-                      resultFoundCount = viewListIconUrls
-                          .where(
-                              (element) => element.toLowerCase().contains(text))
-                          .length;
-                      resultFoundImage = viewListIconUrls
-                          .where(
-                              (element) => element.toLowerCase().contains(text))
-                          .first;
-                    });
+                    setState(
+                      () {
+                        visibleNames = [];
+
+                        futurePoducts.then(
+                          (value) => {
+                            value.forEach((element) {
+                              if (element.title
+                                  .toLowerCase()
+                                  .contains(text.toLowerCase())) {
+                                visibleNames.add(element);
+                              }
+                            })
+                          },
+                        );
+                      },
+                    );
                   }
                 },
               ),
@@ -155,17 +158,19 @@ class _SearchItemsView extends State<SearchItemsView> {
                 ),
               ],
             ),
-            FutureBuilder<Products>(
+            FutureBuilder<List<Product>>(
               future: futurePoducts,
-              builder: (context, data) {
-                if (data.hasData) {
+              builder: (context, Null) {
+                if (visibleNames.isNotEmpty) {
                   return Expanded(
                     child: defaultViewLayout
                         ? GridView.count(
                             crossAxisCount: 2,
-                            childAspectRatio: (110 / 150),
+                            childAspectRatio: (100 / 150),
                             children: new List<Widget>.generate(
-                              resultFoundCount != 0 ? resultFoundCount : 0,
+                              visibleNames.length != 0
+                                  ? visibleNames.length
+                                  : 0,
                               (index) {
                                 return new GridTile(
                                   child: new Container(
@@ -178,7 +183,7 @@ class _SearchItemsView extends State<SearchItemsView> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) => SelectedItem(
-                                              imageUrl: viewListSneakersPics[0],
+                                              product: visibleNames[index],
                                             ),
                                           ),
                                         );
@@ -186,7 +191,7 @@ class _SearchItemsView extends State<SearchItemsView> {
                                       child: Column(
                                         children: [
                                           Image.network(
-                                            data.data!.image,
+                                            visibleNames[index].image,
                                             height: 150,
                                             width: 150,
                                           ),
@@ -200,7 +205,9 @@ class _SearchItemsView extends State<SearchItemsView> {
                                             child: Column(
                                               children: [
                                                 Text(
-                                                  data.data!.title,
+                                                  visibleNames[index].title,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   style: TextStyle(
                                                     fontSize: 14,
                                                     fontWeight: FontWeight.bold,
@@ -213,16 +220,13 @@ class _SearchItemsView extends State<SearchItemsView> {
                                                   alignment:
                                                       Alignment.centerLeft,
                                                   child: Text(
-                                                    "NIKE",
+                                                    "Rating: ${visibleNames[index].rating}",
                                                     style: TextStyle(
                                                       fontSize: 13,
                                                       fontWeight:
-                                                          FontWeight.w400,
+                                                          FontWeight.w500,
                                                     ),
                                                   ),
-                                                ),
-                                                SizedBox(
-                                                  height: 10,
                                                 ),
                                                 Row(
                                                   mainAxisAlignment:
@@ -230,20 +234,25 @@ class _SearchItemsView extends State<SearchItemsView> {
                                                           .spaceBetween,
                                                   children: [
                                                     Text(
-                                                      "\$${data.data!.price}",
+                                                      "\$${visibleNames[index].price.toString()}",
                                                       style: TextStyle(
                                                         fontSize: 12,
                                                         fontWeight:
                                                             FontWeight.bold,
                                                       ),
                                                     ),
-                                                    Text(
-                                                      "ADD TO CART",
-                                                      style: TextStyle(
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.blue),
+                                                    TextButton(
+                                                      child: Text(
+                                                        "ADD TO CART",
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Colors.blue),
+                                                      ),
+                                                      onPressed: () {
+                                                        print('Pressed');
+                                                      },
                                                     ),
                                                   ],
                                                 ),
@@ -264,14 +273,14 @@ class _SearchItemsView extends State<SearchItemsView> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Image.asset(
-                                    "assets/images/${resultFoundImage}",
+                                  Image.network(
+                                    visibleNames[index].image,
                                     width: 100,
                                     height: 100,
                                   ),
                                   Container(
                                     width: MediaQuery.of(context).size.height *
-                                        0.21,
+                                        0.2,
                                     padding: EdgeInsets.only(
                                         top: 10, bottom: 10, left: 10),
                                     child: Column(
@@ -279,7 +288,7 @@ class _SearchItemsView extends State<SearchItemsView> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "FRANCE AUTHENTIC HOME JERSEY 2018",
+                                          visibleNames[index].title,
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 2,
                                           softWrap: true,
@@ -288,7 +297,7 @@ class _SearchItemsView extends State<SearchItemsView> {
                                         ),
                                         SizedBox(height: 15),
                                         Text(
-                                          "Nike",
+                                          visibleNames[index].rating.toString(),
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
                                               fontWeight: FontWeight.w400),
@@ -297,39 +306,47 @@ class _SearchItemsView extends State<SearchItemsView> {
                                     ),
                                   ),
                                   Container(
+                                    alignment: Alignment.centerRight,
                                     padding:
                                         EdgeInsets.only(top: 10, bottom: 10),
                                     child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
                                       children: [
                                         Text(
-                                          r"$130",
+                                          "\$${visibleNames[index].price.toString()}",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20),
                                         ),
                                         SizedBox(height: 20),
-                                        Text(
-                                          "ADD TO CART",
-                                          style: TextStyle(color: Colors.blue),
-                                          overflow: TextOverflow.fade,
-                                          maxLines: 2,
-                                          softWrap: true,
-                                        ),
+                                        TextButton(
+                                          onPressed: () => print("pressed"),
+                                          child: Text(
+                                            "ADD TO CART",
+                                            style:
+                                                TextStyle(color: Colors.blue),
+                                            overflow: TextOverflow.fade,
+                                            maxLines: 2,
+                                            softWrap: true,
+                                          ),
+                                        )
                                       ],
                                     ),
                                   ),
                                 ],
                               );
                             },
-                            itemCount:
-                                resultFoundCount != 0 ? resultFoundCount : 0,
+                            itemCount: visibleNames.length != 0
+                                ? visibleNames.length
+                                : 0,
                             shrinkWrap: true,
                             padding: EdgeInsets.all(5),
                             scrollDirection: Axis.vertical,
                           ),
                   );
-                } else if (data.hasError) {
-                  return Text('${data.error}');
+                } else if (visibleNames.isEmpty) {
+                  return Text("");
                 }
                 return const CircularProgressIndicator();
               },
