@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+
+import 'main.dart';
 
 class ShoppingCart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ScaffoldColor,
       body: Container(
         margin: EdgeInsets.all(20),
         child: Column(

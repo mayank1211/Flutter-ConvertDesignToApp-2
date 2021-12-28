@@ -1,7 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:flutter/services.dart';
 import 'dart:math';
 // Own modules
 import 'models/fetchAsosProducts.dart';
@@ -9,6 +8,11 @@ import 'selectedItem.dart';
 import 'shoppingCart.dart';
 import 'searchItem.dart';
 import 'filterItemsModel.dart';
+
+final Color appbarColor = Color.fromRGBO(243, 243, 243, 1);
+final Color ScaffoldColor = Color.fromRGBO(248, 248, 248, 1);
+// final Color appbarColor = Color.fromRGBO(243, 243, 243, 1);
+// final Color appbarColor = Color.fromRGBO(243, 243, 243, 1);
 
 final List<String> viewListItemNames = ["Sneakers", "Jacket", "Watch"];
 final List<String> viewListIconUrls = [
@@ -31,6 +35,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsFlutterBinding.ensureInitialized();
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: MyHomePage(),
@@ -54,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(248, 248, 248, 1),
+      backgroundColor: ScaffoldColor,
       appBar: AppBar(
         elevation: 0,
         leading: Container(
@@ -91,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
         ],
-        backgroundColor: Color.fromRGBO(248, 248, 248, 1),
+        backgroundColor: ScaffoldColor,
       ),
       body: _pageOptions[selectedPage],
       bottomNavigationBar: ConvexAppBar(
@@ -119,6 +127,14 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  late final Future<List<Product>> products;
+
+  @override
+  void initState() {
+    super.initState();
+    products = fetchProducts();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -247,117 +263,7 @@ class _MainPageState extends State<MainPage> {
                     TextStyle(color: Colors.blue, fontWeight: FontWeight.w500),
               ),
               SizedBox(height: 10),
-              Column(
-                children: <Widget>[
-                  new Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: SizedBox(
-                          height: 210,
-                          // width: 130,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: 10, // viewListIconUrls.length
-                            itemBuilder: (BuildContext ctxt, int index) {
-                              bool isFavorite = Random().nextBool();
-                              return GestureDetector(
-                                onTap: () {
-                                  Future(
-                                    () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => SelectedItem(
-                                            product: new Product(
-                                                id: 1,
-                                                title: "title",
-                                                price: 20.99.toString(),
-                                                category: "category",
-                                                image: "image",
-                                                rating: 4.9,
-                                                description: "description"),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: <Widget>[
-                                        Container(
-                                          height: 210,
-                                          width: 170,
-                                          decoration: BoxDecoration(
-                                              color: Color.fromRGBO(
-                                                  255, 255, 255, 1),
-                                              borderRadius:
-                                                  BorderRadius.circular(30)),
-                                          margin: EdgeInsets.only(right: 20),
-                                          child: Column(
-                                            children: [
-                                              Column(
-                                                children: [
-                                                  Container(
-                                                      height: 140,
-                                                      decoration: BoxDecoration(
-                                                        image: DecorationImage(
-                                                          image: AssetImage(
-                                                            "assets/images/${viewListSneakersPics[0]}",
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      alignment:
-                                                          Alignment.topLeft,
-                                                      padding: EdgeInsets.only(
-                                                          left: 30, top: 20),
-                                                      child: isFavorite
-                                                          ? Icon(
-                                                              Icons.favorite,
-                                                              color:
-                                                                  Colors.orange,
-                                                            )
-                                                          : Icon(Icons
-                                                              .favorite_border)),
-                                                  Text(
-                                                    "Nike Air Max 200",
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                  Text(
-                                                    "Trending Now",
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Colors.orange),
-                                                  ),
-                                                  Text(
-                                                    r"$240",
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  )
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  ),
-                ],
-              ),
+              homeScreenViewItems(products),
               SizedBox(height: 30),
               Text(
                 "View All",
@@ -365,70 +271,86 @@ class _MainPageState extends State<MainPage> {
                     TextStyle(color: Colors.blue, fontWeight: FontWeight.w500),
               ),
               SizedBox(height: 10),
-              Column(
-                children: <Widget>[
-                  new Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: SizedBox(
-                          height: 210,
-                          width: 150,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: 10, //viewListIconUrls.length,
-                            itemBuilder: (BuildContext ctxt, int index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  Future(() {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => SelectedItem(
-                                          product: new Product(
-                                              id: 1,
-                                              title: "title",
-                                              price: 20.99.toString(),
-                                              category: "category",
-                                              image: "image",
-                                              rating: 4.9,
-                                              description: "description"),
-                                        ),
-                                      ),
-                                    );
-                                  });
+              homeScreenViewItems(products)
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+homeScreenViewItems(Future<List<Product>> products) {
+  return Column(
+    children: <Widget>[
+      new Row(
+        children: <Widget>[
+          Expanded(
+            child: SizedBox(
+              height: 210,
+              // width: 130,
+              child: FutureBuilder<List<Product>>(
+                future: products,
+                builder: (context, snapshot) {
+                  if (snapshot.data!.length != 0) {
+                    return Expanded(
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 5, // viewListIconUrls.length
+                        itemBuilder: (BuildContext ctxt, int index) {
+                          bool isFavorite = Random().nextBool();
+                          return GestureDetector(
+                            onTap: () {
+                              Future(
+                                () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => SelectedItem(
+                                          product: snapshot.data![index]),
+                                    ),
+                                  );
                                 },
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: <Widget>[
-                                        Container(
-                                          height: 210,
-                                          width: 170,
-                                          decoration: BoxDecoration(
-                                              color: Color.fromRGBO(
-                                                  255, 255, 255, 1),
-                                              borderRadius:
-                                                  BorderRadius.circular(30)),
-                                          margin: EdgeInsets.only(right: 20),
-                                          child: Column(
+                              );
+                            },
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: <Widget>[
+                                    Container(
+                                      height: 210,
+                                      width: 170,
+                                      decoration: BoxDecoration(
+                                          color:
+                                              Color.fromRGBO(255, 255, 255, 1),
+                                          borderRadius:
+                                              BorderRadius.circular(30)),
+                                      margin: EdgeInsets.only(right: 20),
+                                      child: Column(
+                                        children: [
+                                          Column(
                                             children: [
                                               Column(
                                                 children: [
-                                                  Container(
-                                                    height: 140,
-                                                    decoration: BoxDecoration(
-                                                      image: DecorationImage(
-                                                        image: AssetImage(
-                                                          "assets/images/${viewListClothesPics[0]}",
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    alignment:
-                                                        Alignment.topLeft,
+                                                  Padding(
                                                     padding: EdgeInsets.only(
-                                                        left: 30, top: 20),
-                                                    child: Icon(
-                                                        Icons.favorite_border),
+                                                        left: 20, top: 10),
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                      child: isFavorite
+                                                          ? Icon(
+                                                              Icons.favorite,
+                                                              color:
+                                                                  Colors.orange,
+                                                            )
+                                                          : Icon(Icons
+                                                              .favorite_border),
+                                                    ),
+                                                  ),
+                                                  Image.network(
+                                                    snapshot.data![index].image,
+                                                    height: 120,
                                                   ),
                                                   Text(
                                                     "Nike Air Max 200",
@@ -452,26 +374,29 @@ class _MainPageState extends State<MainPage> {
                                                 ],
                                               )
                                             ],
-                                          ),
-                                        ),
-                                      ],
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
-                              );
-                            },
-                          ),
-                        ),
+                              ],
+                            ),
+                          );
+                        },
                       ),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  ),
-                ],
+                    );
+                  } else if (snapshot.data!.isEmpty) {
+                    return Text("");
+                  }
+                  return const CircularProgressIndicator();
+                },
               ),
-            ],
+            ),
           ),
-        ),
+        ],
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
       ),
-    );
-  }
+    ],
+  );
 }

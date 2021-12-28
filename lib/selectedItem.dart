@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:ecommerce/models/fetchAsosProducts.dart';
 import 'package:flutter/material.dart';
 
+import 'main.dart';
+
 class SelectedItem extends StatefulWidget {
   SelectedItem({Key? key, required this.product}) : super(key: key);
   Product product;
@@ -15,9 +17,10 @@ class _ItemPageState extends State<SelectedItem> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ScaffoldColor,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Color.fromRGBO(248, 248, 248, 1),
+        backgroundColor: appbarColor,
         leading: Container(
           margin: EdgeInsets.only(left: 15, top: 10),
           child: IconButton(
@@ -48,200 +51,204 @@ class _ItemPageState extends State<SelectedItem> {
           ),
         ],
       ),
-      body: Column(
+      body: Row(
         children: [
-          Container(
-            color: Color.fromRGBO(243, 243, 243, 1),
-            child: Column(
-              children: [
-                Image.network(
-                  widget.product.image,
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  height: MediaQuery.of(context).size.height * 0.3,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.2,
-                      height: MediaQuery.of(context).size.height * 0.07,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(color: Colors.orange),
-                      ),
-                      child: Image.network(
-                        widget.product.image,
-                        fit: BoxFit.cover,
-                      ),
-                      margin: EdgeInsets.only(right: 10),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.2,
-                      height: MediaQuery.of(context).size.height * 0.07,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(color: Colors.orange),
-                      ),
-                      child: Image.network(
-                        widget.product.image,
-                        fit: BoxFit.cover,
-                      ),
-                      margin: EdgeInsets.only(right: 10),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.2,
-                      height: MediaQuery.of(context).size.height * 0.07,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(color: Colors.orange),
-                      ),
-                      child: Image.network(
-                        widget.product.image,
-                        fit: BoxFit.cover,
-                      ),
-                      margin: EdgeInsets.only(right: 10),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 10),
           Expanded(
             flex: 2,
             child: SingleChildScrollView(
               padding: EdgeInsets.zero,
               scrollDirection: Axis.vertical,
-              child: Flexible(
-                child: Container(
-                  padding: EdgeInsets.only(left: 30, right: 30),
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(40),
-                      topRight: Radius.circular(40),
+              child: Container(
+                color: Color.fromRGBO(243, 243, 243, 1),
+                child: Column(
+                  children: [
+                    Image.network(
+                      widget.product.image,
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      height: MediaQuery.of(context).size.height * 0.3,
                     ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Icon(
-                          Icons.horizontal_rule,
-                          size: 40,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.15,
+                          height: MediaQuery.of(context).size.height * 0.07,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            border: Border.all(color: Colors.orange),
+                          ),
+                          child: Image.network(
+                            widget.product.image,
+                            fit: BoxFit.cover,
+                          ),
+                          margin:
+                              EdgeInsets.only(right: 10, top: 10, bottom: 10),
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.15,
+                          height: MediaQuery.of(context).size.height * 0.07,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            border: Border.all(color: Colors.orange),
+                          ),
+                          child: Image.network(
+                            widget.product.image,
+                            fit: BoxFit.cover,
+                          ),
+                          margin:
+                              EdgeInsets.only(right: 10, top: 10, bottom: 10),
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.15,
+                          height: MediaQuery.of(context).size.height * 0.07,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            border: Border.all(color: Colors.orange),
+                          ),
+                          child: Image.network(
+                            widget.product.image,
+                            fit: BoxFit.cover,
+                          ),
+                          margin:
+                              EdgeInsets.only(right: 10, top: 10, bottom: 10),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 20, right: 20),
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height * 0.5,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(40),
+                          topRight: Radius.circular(40),
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            width: MediaQuery.of(context).size.height * 0.29,
-                            child: Text(
-                              widget.product.title,
-                              overflow: TextOverflow.visible,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 19,
-                              ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Icon(
+                              Icons.horizontal_rule,
+                              size: 40,
                             ),
                           ),
-                          Column(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    r"$",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                      color: Colors.orange,
-                                    ),
+                              Container(
+                                width:
+                                    MediaQuery.of(context).size.height * 0.29,
+                                child: Text(
+                                  widget.product.title,
+                                  overflow: TextOverflow.visible,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 19,
                                   ),
-                                  Text(
-                                    widget.product.price,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                              Column(
                                 children: [
-                                  SizedBox(),
-                                  IconTheme(
-                                    data: IconThemeData(
-                                      color: Colors.amber,
-                                      size: 15,
-                                    ),
-                                    child: StarDisplay(
-                                        value: widget.product.rating.toInt()),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        r"$",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                          color: Colors.orange,
+                                        ),
+                                      ),
+                                      Text(
+                                        widget.product.price,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SizedBox(),
+                                      IconTheme(
+                                        data: IconThemeData(
+                                          color: Colors.amber,
+                                          size: 15,
+                                        ),
+                                        child: StarDisplay(
+                                            value:
+                                                widget.product.rating.toInt()),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
                             ],
                           ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            "Available Sizes",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 15),
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                              padding: EdgeInsets.zero,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: 19,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  child: Row(
+                                    children: [
+                                      Text('Entry A'),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          Text(
+                            "Color",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 15),
+                            textAlign: TextAlign.left,
+                          ),
+                          Expanded(
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: <Widget>[
+                                Text('Entry A'),
+                                Text('Entry A'),
+                                Text('Entry A')
+                              ],
+                            ),
+                          ),
+                          Text(
+                            "Description",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 15),
+                            textAlign: TextAlign.left,
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(bottom: 40),
+                            child: Text(widget.product.description),
+                          )
                         ],
                       ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                        "Available Sizes",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 15),
-                      ),
-                      Expanded(
-                        child: ListView.builder(
-                          padding: EdgeInsets.zero,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 19,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              child: Row(
-                                children: [
-                                  Text('Entry A'),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      Text(
-                        "Color",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 15),
-                        textAlign: TextAlign.left,
-                      ),
-                      Expanded(
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: <Widget>[
-                            Text('Entry A'),
-                            Text('Entry A'),
-                            Text('Entry A')
-                          ],
-                        ),
-                      ),
-                      Text(
-                        "Description",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 15),
-                        textAlign: TextAlign.left,
-                      ),
-                      Text(
-                        widget.product.description,
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

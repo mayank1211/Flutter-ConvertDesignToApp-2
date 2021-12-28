@@ -20,9 +20,6 @@ Future<List<Product>> fetchProducts() async {
           rating: double.parse(item["rating"]["rate"].toString()),
           description: item["description"]));
     }
-
-    print("product length ${products.length}");
-
     return products;
   } else {
     throw Exception('Failed to load products');

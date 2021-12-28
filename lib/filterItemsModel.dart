@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'main.dart';
+
 class FilterItemsModel extends StatefulWidget {
   FilterItemsModel({Key? key, required this.filterByItem}) : super(key: key);
   var filterByItem;
@@ -12,6 +14,7 @@ class _filterItemsModel extends State<FilterItemsModel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ScaffoldColor,
       body: GridView.count(
         crossAxisCount: 2,
         children: new List<Widget>.generate(

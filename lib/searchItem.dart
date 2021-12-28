@@ -25,6 +25,7 @@ class _SearchItemsView extends State<SearchItemsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ScaffoldColor,
       body: Container(
         margin: EdgeInsets.all(10),
         child: Column(
@@ -175,7 +176,9 @@ class _SearchItemsView extends State<SearchItemsView> {
                                 return new GridTile(
                                   child: new Container(
                                     margin: EdgeInsets.only(
-                                        top: 10, left: 5, right: 5),
+                                      top: 10,
+                                      left: 5,
+                                    ),
                                     color: Colors.white,
                                     child: GestureDetector(
                                       onTap: () {
@@ -312,6 +315,7 @@ class _SearchItemsView extends State<SearchItemsView> {
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.end,
+                                      mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Text(
                                           "\$${visibleNames[index].price.toString()}",
