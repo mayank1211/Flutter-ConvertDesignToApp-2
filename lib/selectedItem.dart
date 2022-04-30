@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:ecommerce/models/fetchAsosProducts.dart';
+import 'package:ecommerce/searchItem.dart';
+import 'package:ecommerce/shoppingCart.dart';
 import 'package:flutter/material.dart';
 
 import 'main.dart';
@@ -261,9 +263,11 @@ class _ItemPageState extends State<SelectedItem> {
         child: FittedBox(
           child: FloatingActionButton(
             backgroundColor: Colors.orange,
-            foregroundColor: Colors.white,
+            foregroundColor: Colors.black,
             child: Icon(Icons.shopping_basket),
-            onPressed: () {},
+            onPressed: () {
+              AddItemToCart(widget.product);
+            },
           ),
         ),
       ),

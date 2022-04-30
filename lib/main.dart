@@ -1,7 +1,9 @@
+import 'package:ecommerce/loginpage.dart';
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/services.dart';
 import 'dart:math';
+
 // Own modules
 import 'models/fetchAsosProducts.dart';
 import 'selectedItem.dart';
@@ -28,7 +30,10 @@ final List<String> viewListClothesPics = [
   'jacket.png',
 ];
 
-void main() => runApp(MyApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -41,7 +46,8 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MyHomePage(),
+      // home: MyHomePage(),
+      home: const LoginPage(title: 'Login UI'),
     );
   }
 }
@@ -64,42 +70,53 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       backgroundColor: ScaffoldColor,
       appBar: AppBar(
-        elevation: 0,
-        leading: Container(
-          height: 20,
-          width: 20,
-          margin: EdgeInsets.only(left: 15, top: 10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: IconButton(
-            icon: Icon(
-              Icons.sort,
-              color: Colors.grey,
-              size: 25,
-            ),
-            onPressed: () {
-              print("Pressed");
-            },
-          ),
-        ),
         title: Text(''),
-        actions: [
-          Container(
-            height: 20,
-            width: 50,
-            margin: EdgeInsets.only(right: 15, top: 10),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20.0),
-              child: Image.network(
-                "https://source.unsplash.com/50x50/?portrait",
-                fit: BoxFit.fill,
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            Container(
+              margin: const EdgeInsets.only(
+                top: 40,
+                left: 10.0,
+                right: 10.0,
+                bottom: 10.0,
+              ),
+              height: 300,
+              width: 20,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                child: Image.network(
+                  "https://source.unsplash.com/400x400/?portrait",
+                  fit: BoxFit.fill,
+                ),
               ),
             ),
-          ),
-        ],
-        backgroundColor: ScaffoldColor,
+            Divider(
+              height: 1,
+              thickness: 1,
+            ),
+            ListTile(
+              leading: Icon(Icons.favorite),
+              title: Text('Saved Items'),
+              // selected: 0,_selectedDestination == 0
+              // onTap: () => selectDestination(0),
+            ),
+            ListTile(
+              leading: Icon(Icons.delete),
+              title: Text('Profile'),
+              // selected: _selectedDestination == 1,
+              // onTap: () => selectDestination(1),
+            ),
+            ListTile(
+              leading: Icon(Icons.label),
+              title: Text('Sign Out'),
+              // selected: _selectedDestination == 2,
+              // onTap: () => selectDestination(2),
+            ),
+          ],
+        ),
       ),
       body: _pageOptions[selectedPage],
       bottomNavigationBar: ConvexAppBar(
@@ -287,108 +304,115 @@ homeScreenViewItems(Future<List<Product>> products) {
         children: <Widget>[
           Expanded(
             child: SizedBox(
-              height: 210,
+              height: 215,
               // width: 130,
               child: FutureBuilder<List<Product>>(
                 future: products,
                 builder: (context, snapshot) {
-                  if (snapshot.data!.length != 0) {
-                    return Expanded(
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: 5, // viewListIconUrls.length
-                        itemBuilder: (BuildContext ctxt, int index) {
-                          bool isFavorite = Random().nextBool();
-                          return GestureDetector(
-                            onTap: () {
-                              Future(
-                                () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => SelectedItem(
-                                          product: snapshot.data![index]),
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: <Widget>[
-                                    Container(
-                                      height: 210,
-                                      width: 170,
-                                      decoration: BoxDecoration(
-                                          color:
-                                              Color.fromRGBO(255, 255, 255, 1),
-                                          borderRadius:
-                                              BorderRadius.circular(30)),
-                                      margin: EdgeInsets.only(right: 20),
-                                      child: Column(
-                                        children: [
-                                          Column(
-                                            children: [
-                                              Column(
-                                                children: [
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 20, top: 10),
-                                                    child: Align(
-                                                      alignment:
-                                                          Alignment.centerLeft,
-                                                      child: isFavorite
-                                                          ? Icon(
-                                                              Icons.favorite,
-                                                              color:
-                                                                  Colors.orange,
-                                                            )
-                                                          : Icon(Icons
-                                                              .favorite_border),
-                                                    ),
-                                                  ),
-                                                  Image.network(
-                                                    snapshot.data![index].image,
-                                                    height: 120,
-                                                  ),
-                                                  Text(
-                                                    "Nike Air Max 200",
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                  Text(
-                                                    "Trending Now",
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Colors.orange),
-                                                  ),
-                                                  Text(
-                                                    r"$240",
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  )
-                                                ],
-                                              )
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: const CircularProgressIndicator(),
                     );
-                  } else if (snapshot.data!.isEmpty) {
-                    return Text("");
                   }
+                  return Expanded(
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 5, // viewListIconUrls.length
+                      itemBuilder: (BuildContext ctxt, int index) {
+                        bool isFavorite = Random().nextBool();
+                        return GestureDetector(
+                          onTap: () {
+                            Future(
+                              () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SelectedItem(
+                                        product: snapshot.data![index]),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          child: Column(
+                            children: [
+                              Row(
+                                children: <Widget>[
+                                  Container(
+                                    height: 215,
+                                    width: 170,
+                                    decoration: BoxDecoration(
+                                        color: Color.fromRGBO(255, 255, 255, 1),
+                                        borderRadius:
+                                            BorderRadius.circular(30)),
+                                    margin: EdgeInsets.only(right: 20),
+                                    child: Column(
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Column(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 20, top: 10),
+                                                  child: Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: isFavorite
+                                                        ? Icon(
+                                                            Icons.favorite,
+                                                            color:
+                                                                Colors.orange,
+                                                          )
+                                                        : Icon(Icons
+                                                            .favorite_border),
+                                                  ),
+                                                ),
+                                                Image.network(
+                                                  snapshot.data![index].image,
+                                                  height: 120,
+                                                ),
+                                                SizedBox(
+                                                  height: 5.0,
+                                                ),
+                                                Text(
+                                                  "${snapshot.data![index].title}",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                                Text(
+                                                  "Trending Now",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.orange),
+                                                ),
+                                                Text(
+                                                  r"$" +
+                                                      "${snapshot.data![index].price}",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  );
+
                   return const CircularProgressIndicator();
                 },
               ),

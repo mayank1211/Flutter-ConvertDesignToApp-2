@@ -1,5 +1,7 @@
 import 'package:ecommerce/models/fetchAsosProducts.dart';
+import 'package:ecommerce/shoppingCart.dart';
 import 'package:flutter/material.dart';
+
 import 'selectedItem.dart';
 import 'main.dart';
 
@@ -153,7 +155,9 @@ class _SearchItemsView extends State<SearchItemsView> {
                           color: Colors.blue,
                         ),
                       ),
-                      onTap: () => print("sort"),
+                      onTap: () => {
+                        print("Sorted"),
+                      },
                     ),
                   ],
                 ),
@@ -161,7 +165,7 @@ class _SearchItemsView extends State<SearchItemsView> {
             ),
             FutureBuilder<List<Product>>(
               future: futurePoducts,
-              builder: (context, Null) {
+              builder: (BuildContext context, Null) {
                 if (visibleNames.isNotEmpty) {
                   return Expanded(
                     child: defaultViewLayout
@@ -185,7 +189,8 @@ class _SearchItemsView extends State<SearchItemsView> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => SelectedItem(
+                                            builder: (BuildContext context) =>
+                                                SelectedItem(
                                               product: visibleNames[index],
                                             ),
                                           ),
@@ -254,7 +259,9 @@ class _SearchItemsView extends State<SearchItemsView> {
                                                             color: Colors.blue),
                                                       ),
                                                       onPressed: () {
-                                                        print('Pressed');
+                                                        AddItemToCart(
+                                                          visibleNames[index],
+                                                        );
                                                       },
                                                     ),
                                                   ],
@@ -271,7 +278,7 @@ class _SearchItemsView extends State<SearchItemsView> {
                             ),
                           )
                         : ListView.builder(
-                            itemBuilder: (BuildContext, index) {
+                            itemBuilder: (BuildContext context, index) {
                               return Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -283,7 +290,7 @@ class _SearchItemsView extends State<SearchItemsView> {
                                   ),
                                   Container(
                                     width: MediaQuery.of(context).size.height *
-                                        0.2,
+                                        0.19,
                                     padding: EdgeInsets.only(
                                         top: 10, bottom: 10, left: 10),
                                     child: Column(
